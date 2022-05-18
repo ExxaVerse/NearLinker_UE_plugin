@@ -66,7 +66,7 @@ void UNearlinkerWalletComponent::CreateCredentials(FString const& account, FThen
 			return; 
 		}
 		FNearKeyPair key_pair;
-		FJsonObjectConverter::JsonObjectStringToUStruct(response, &key_pair);
+		FJsonObjectConverter::JsonObjectStringToUStruct(response, &key_pair, 0, 0);
 		
 		FString const url_to_add_key="https://"+network+"/login/?referrer="+FPlatformHttp::UrlEncode(client_name)+"&public_key="+FPlatformHttp::UrlEncode(key_pair.public_key);
 		UE_LOG(LogNearlinker, Log, TEXT("CreateCredentials: asking to add a new key at %s"), *url_to_add_key);

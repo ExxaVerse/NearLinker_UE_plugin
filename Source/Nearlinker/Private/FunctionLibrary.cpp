@@ -164,7 +164,7 @@ template<class ResponseHandler>
 void ContractView(FString const& contract_id, FFunctionCallData const& function_description, ResponseHandler const& response_handler){
 	FString function_description_string=function_description.name;
 	if(function_description.parameters.Num()>0)                  function_description_string+="?";
-	for(auto const& [key,value]:function_description.parameters) function_description_string+=key+"="+value+"&";
+	for(auto const& element:function_description.parameters) function_description_string+=element.Key+"="+element.Value+"&";
 	function_description_string.RemoveFromEnd("&");
 	UNearlinkerFunctionLibrary::SendRequestToIntegrationServer("GET", FString{"/contract"}/contract_id/function_description_string, response_handler);
 }
