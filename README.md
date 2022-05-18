@@ -1,13 +1,14 @@
 # Quick start
 
-1. Open a project
-2. Go to project settings and enable the plugin
-3. Restart the Unreal Editor
-4. Go to project settings > Plugins > Nearlinker
-5. Set the "Integration server" "Executable path" to the location of node.exe
-6. Set the "Integration server" "Working directory" to the location of the nl-api-server directory from the NearLinker git repository
-7. If the integration server runs locally, create a "Certificates" folder in your project's "Content" diractory, and copy the integration server CA to "Content/Certificates/cacert.pem" 
-7. Use the plugin in blueprints. See BP_NearMenu for an example of how to use it.
+1. Clone this repository to `Plugins/NearLinker` in your project directory
+2. Open your project in the Unreal Editor
+3. Go to project settings and enable the plugin
+4. Restart the Unreal Editor
+5. Go to project settings > Plugins > Nearlinker
+6. Set the "Integration server" "Executable path" to the location of node.exe
+7. Set the "Integration server" "Working directory" to the location of the nl-api-server directory from the NearLinker git repository
+8. If the integration server runs locally, create a "Certificates" folder in your project's "Content" directory, and copy the integration server CA to "Content/Certificates/cacert.pem" (see how to generate certificates in the nl-api-server documentation)
+9. Use the plugin in blueprints. See BP_NearMenu for an example of how to use it.
 
 
 #Source code
