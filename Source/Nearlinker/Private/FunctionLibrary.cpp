@@ -162,11 +162,15 @@ void UNearlinkerFunctionLibrary::ContractCall(FString const& contract_id, FFunct
 
 template<class ResponseHandler>
 void ContractView(FString const& contract_id, FFunctionCallData const& function_description, ResponseHandler const& response_handler){
-	FString function_description_string=function_description.name;
-	if(function_description.parameters.Num()>0)                  function_description_string+="?";
-	for(auto const& element:function_description.parameters) function_description_string+=element.Key+"="+element.Value+"&";
-	function_description_string.RemoveFromEnd("&");
-	UNearlinkerFunctionLibrary::SendRequestToIntegrationServer("GET", FString{"/contract"}/contract_id/function_description_string, response_handler);
+	FContractViewData data;
+	data.function=function_description;
+
+	FString data_json;
+	if(!FJsonObjectConverter::UStructToJsonObjectString(data, data_json)){
+		UE_LOG(LogNearlinker, Error, TEXT("Failed to export contract function view data to Json"));
+		return;
+	}
+	UNearlinkerFunctionLibrary::SendRequestToIntegrationServer("POST", FString{"/contract"}/contract_id/FString{"view"}, response_handler, data_json);
 }
 void UNearlinkerFunctionLibrary::ContractView(FString const& contract_id, FFunctionCallData const& function_description, FNearHttpRequestCompleteDelegate const& response_handler){
 	return ::ContractView(contract_id, function_description, response_handler);
@@ -210,15 +214,15 @@ void UNearlinkerFunctionLibrary::ViewNftTotalSupply(FString const& contract_id, 
 void UNearlinkerFunctionLibrary::ViewNftTokens(FString const& contract_id, FNearHttpRequestCompleteDelegate const& response_handler, int from_index, int limit){
 	FFunctionCallData function_call;
 	function_call.name="nft_tokens";
-	function_call.parameters.Add(TEXT("from_index"), FString::FromInt(from_index));
-	function_call.parameters.Add(TEXT("limit"     ), FString::FromInt(limit     ));
+	function_call.parameters_string.Add(TEXT("from_index"), FString::FromInt(from_index));
+	function_call.parameters_int.Add(TEXT("limit"     ), limit     );
 	UNearlinkerFunctionLibrary::ContractView(contract_id, function_call, response_handler);
 }
 
 void UNearlinkerFunctionLibrary::ViewNftSupplyForOwner(FString const& contract_id, FNearHttpGetIntCompleteDelegate const& response_handler, FString const& account_id){
 	FFunctionCallData function_call;
 	function_call.name="nft_supply_for_owner";
-	function_call.parameters.Add(TEXT("account_id"), account_id);
+	function_call.parameters_string.Add(TEXT("account_id"), account_id);
 	UNearlinkerFunctionLibrary::ContractView(contract_id, function_call, [response_handler](FString response, bool request_succeded){
 		parse_and_forward(response, request_succeded, response_handler);
 	});
@@ -227,9 +231,9 @@ void UNearlinkerFunctionLibrary::ViewNftSupplyForOwner(FString const& contract_i
 void UNearlinkerFunctionLibrary::ViewNftTokensForOwner(FString const& contract_id, FNearHttpRequestCompleteDelegate const& response_handler, FString const& account_id, int from_index, int limit){
 	FFunctionCallData function_call;
 	function_call.name="nft_tokens_for_owner";
-	function_call.parameters.Add(TEXT("account_id"), account_id);
-	function_call.parameters.Add(TEXT("from_index"), FString::FromInt(from_index));
-	function_call.parameters.Add(TEXT("limit"     ), FString::FromInt(limit     ));
+	function_call.parameters_string.Add(TEXT("account_id"), account_id);
+	function_call.parameters_string.Add(TEXT("from_index"), FString::FromInt(from_index));
+	function_call.parameters_int.Add(TEXT("limit"     ), limit     );
 	UNearlinkerFunctionLibrary::ContractView(contract_id, function_call, response_handler);
 }
 

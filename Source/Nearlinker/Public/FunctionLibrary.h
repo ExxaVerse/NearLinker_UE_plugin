@@ -18,7 +18,17 @@ struct FFunctionCallData{
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString name;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<FString,FString> parameters;
+	TMap<FString,FString> parameters_string;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FString,int> parameters_int;
+};
+
+USTRUCT(BlueprintType)
+struct FContractViewData{
+	GENERATED_BODY()
+ 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FFunctionCallData function;
 };
 
 USTRUCT(BlueprintType)
