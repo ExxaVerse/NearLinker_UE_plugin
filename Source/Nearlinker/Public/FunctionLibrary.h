@@ -47,8 +47,55 @@ struct FContractCallData{
 	FString deposit;
 };
 
+USTRUCT(BlueprintType)
+struct FNearTokenMetadata{
+	GENERATED_BODY()
+ 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString title;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString description;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString media;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString media_hash;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int copies;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int issued_at;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int expires_at;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int starts_at;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int updated_at;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString extra;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString reference;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString reference_hash;
+};
+
+USTRUCT(BlueprintType)
+struct FNearToken{
+	GENERATED_BODY()
+ 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString token_id;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString owner_id;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FNearTokenMetadata metadata;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FString,int> approved_account_ids;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<FString,int> royalty;
+};
+ 
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FNearHttpRequestCompleteDelegate, FString, Response, bool, bConnectedSuccessfully);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(FNearHttpGetIntCompleteDelegate, int, result, bool, bConnectedSuccessfully);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FNearHttpGetTokensCompleteDelegate, TArray<FNearToken> const&, near_tokens, bool, bConnectedSuccessfully);
 
 UCLASS()
 class NEARLINKER_API UNearlinkerFunctionLibrary : public UBlueprintFunctionLibrary{
@@ -90,9 +137,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Nearlinker|NFT|Enumeration", meta=(AutoCreateRefTerm="contract_id"))
 	static void ViewNftTotalSupply(FString const& contract_id, FNearHttpGetIntCompleteDelegate const& response_handler);
 	UFUNCTION(BlueprintCallable, Category="Nearlinker|NFT|Enumeration", meta=(AutoCreateRefTerm="contract_id"))
-	static void ViewNftTokens(FString const& contract_id, FNearHttpRequestCompleteDelegate const& response_handler, int from_index=0, int limit=100);
+	static void ViewNftTokens(FString const& contract_id, FNearHttpGetTokensCompleteDelegate const& response_handler, int from_index=0, int limit=100);
 	UFUNCTION(BlueprintCallable, Category="Nearlinker|NFT|Enumeration", meta=(AutoCreateRefTerm="contract_id"))
 	static void ViewNftSupplyForOwner(FString const& contract_id, FNearHttpGetIntCompleteDelegate const& response_handler, FString const& account_id);
 	UFUNCTION(BlueprintCallable, Category="Nearlinker|NFT|Enumeration", meta=(AutoCreateRefTerm="contract_id"))
-	static void ViewNftTokensForOwner(FString const& contract_id, FNearHttpRequestCompleteDelegate const& response_handler, FString const& account_id, int from_index=0, int limit=100);
+	static void ViewNftTokensForOwner(FString const& contract_id, FNearHttpGetTokensCompleteDelegate const& response_handler, FString const& account_id, int from_index=0, int limit=100);
 };

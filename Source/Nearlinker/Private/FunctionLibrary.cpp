@@ -203,6 +203,15 @@ void parse_and_forward(FString response, bool request_succeded, FNearHttpGetIntC
 	response_handler.ExecuteIfBound(result.IsSet()?result.GetValue():0, request_succeded && result.IsSet());
 }
 
+void parse_and_forward(FString response, bool request_succeded, FNearHttpGetTokensCompleteDelegate const& response_handler){
+	TArray<FNearToken> result;
+	if(!FJsonObjectConverter::JsonArrayStringToUStruct(response, &result, 0, 0)){
+		UE_LOG(LogNearlinker, Error, TEXT("Failed to parse the Inegration Server response as a list of NEAR tokens"));
+		return;
+	}
+	response_handler.ExecuteIfBound(result, request_succeded);
+}
+
 void UNearlinkerFunctionLibrary::ViewNftTotalSupply(FString const& contract_id, FNearHttpGetIntCompleteDelegate const& response_handler){
 	FFunctionCallData function_call;
 	function_call.name="nft_total_supply";
@@ -211,12 +220,14 @@ void UNearlinkerFunctionLibrary::ViewNftTotalSupply(FString const& contract_id, 
 	});
 }
 
-void UNearlinkerFunctionLibrary::ViewNftTokens(FString const& contract_id, FNearHttpRequestCompleteDelegate const& response_handler, int from_index, int limit){
+void UNearlinkerFunctionLibrary::ViewNftTokens(FString const& contract_id, FNearHttpGetTokensCompleteDelegate const& response_handler, int from_index, int limit){
 	FFunctionCallData function_call;
 	function_call.name="nft_tokens";
 	function_call.parameters_string.Add(TEXT("from_index"), FString::FromInt(from_index));
 	function_call.parameters_int.Add(TEXT("limit"     ), limit     );
-	UNearlinkerFunctionLibrary::ContractView(contract_id, function_call, response_handler);
+	UNearlinkerFunctionLibrary::ContractView(contract_id, function_call, [response_handler](FString response, bool request_succeded){
+		parse_and_forward(response, request_succeded, response_handler);
+	});
 }
 
 void UNearlinkerFunctionLibrary::ViewNftSupplyForOwner(FString const& contract_id, FNearHttpGetIntCompleteDelegate const& response_handler, FString const& account_id){
@@ -228,12 +239,14 @@ void UNearlinkerFunctionLibrary::ViewNftSupplyForOwner(FString const& contract_i
 	});
 }
 
-void UNearlinkerFunctionLibrary::ViewNftTokensForOwner(FString const& contract_id, FNearHttpRequestCompleteDelegate const& response_handler, FString const& account_id, int from_index, int limit){
+void UNearlinkerFunctionLibrary::ViewNftTokensForOwner(FString const& contract_id, FNearHttpGetTokensCompleteDelegate const& response_handler, FString const& account_id, int from_index, int limit){
 	FFunctionCallData function_call;
 	function_call.name="nft_tokens_for_owner";
 	function_call.parameters_string.Add(TEXT("account_id"), account_id);
 	function_call.parameters_string.Add(TEXT("from_index"), FString::FromInt(from_index));
 	function_call.parameters_int.Add(TEXT("limit"     ), limit     );
-	UNearlinkerFunctionLibrary::ContractView(contract_id, function_call, response_handler);
+	UNearlinkerFunctionLibrary::ContractView(contract_id, function_call, [response_handler](FString response, bool request_succeded){
+		parse_and_forward(response, request_succeded, response_handler);
+	});
 }
 
