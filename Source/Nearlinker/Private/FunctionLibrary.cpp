@@ -196,7 +196,7 @@ TOptional<int> str2int(char const *s, int base = 0){
 }
 void parse_and_forward(FString response, bool request_succeded, FNearHttpGetIntCompleteDelegate const& response_handler){
 	auto const result=str2int(TCHAR_TO_UTF8(*response));
-	response_handler.ExecuteIfBound(result.GetValue(), request_succeded && result.IsSet());
+	response_handler.ExecuteIfBound(result.IsSet()?result.GetValue():0, request_succeded && result.IsSet());
 }
 
 void UNearlinkerFunctionLibrary::ViewNftTotalSupply(FString const& contract_id, FNearHttpGetIntCompleteDelegate const& response_handler){
