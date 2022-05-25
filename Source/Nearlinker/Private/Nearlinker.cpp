@@ -2,7 +2,7 @@
 
 #include"Nearlinker.h"
 #include"Settings.h"
-#include"FunctionLibrary.h"
+#include"LibCore.h"
 #include"ISettingsModule.h"
 #include"ISettingsSection.h"
 #include"log.h"
@@ -13,14 +13,14 @@ void FNearlinkerModule::StartupModule(){
 	// This code will execute after your module is loaded into memory; the exact timing is specified in the .uplugin file per-module
 	this->RegisterSettings();
 	if(GetMutableDefault<UNearlinkerSettings>()->auto_launch_local_server){
-		UNearlinkerFunctionLibrary::StartIntegrationServer();
+		UNearlinkerFunctionLibraryCore::StartIntegrationServer();
 	}
 }
 
 void FNearlinkerModule::ShutdownModule(){
 	// This function may be called during shutdown to clean up your module.  For modules that support dynamic reloading,
 	// we call this function before unloading the module.
-	UNearlinkerFunctionLibrary::StopIntegrationServer();
+	UNearlinkerFunctionLibraryCore::StopIntegrationServer();
 	this->UnregisterSettings();
 }
 

@@ -1,7 +1,7 @@
 // Copyright 2022 ExxaVerse LLC. All Rights Reserved.
 
 #include"WalletComponent.h"
-#include"FunctionLibrary.h"
+#include"LibCore.h"
 #include"log.h"
 #include"Containers/UnrealString.h"
 #include"Misc/FileHelper.h"
@@ -60,7 +60,7 @@ bool UNearlinkerWalletComponent::LoadCredentials(FString const& file_path, FStri
 
 void UNearlinkerWalletComponent::CreateCredentials(FString const& account, FThenDelegate const& then, FNearAddKeyDelegate const& ask_add_key, FString const& network, FString const& client_name){
 	//For some reason, UE default inputs are cleared if passed by reference to lambdas
-	UNearlinkerFunctionLibrary::SendRequestToIntegrationServer("GET", FString{"/keypair"}, [this,then,ask_add_key,account,network,client_name](FString response, bool request_succeded){
+	UNearlinkerFunctionLibraryCore::SendRequestToIntegrationServer("GET", FString{"/keypair"}, [this,then,ask_add_key,account,network,client_name](FString response, bool request_succeded){
 		if(!request_succeded){
 			UE_LOG(LogNearlinker, Error, TEXT("CreateCredentials: failed to request a new key pair from the integration server"));
 			return; 
