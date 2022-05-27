@@ -136,7 +136,9 @@ void UNearlinkerFunctionLibraryNft::ViewNftIsApproved(FString const& contract_id
 	function_call.name="nft_is_approved";
 	function_call.add_parameter(TEXT("token_id")            , token_id            );
 	function_call.add_parameter(TEXT("approved_account_id") , approved_account_id );
+	if(approval_id>=0){
 	function_call.add_parameter(TEXT("approval_id")         , approval_id         );
+	}
 	UNearlinkerFunctionLibraryCore::ContractView(contract_id, function_call, [response_handler](FString response, bool request_succeded){
 		parse_and_forward(response, request_succeded, response_handler);
 	});
