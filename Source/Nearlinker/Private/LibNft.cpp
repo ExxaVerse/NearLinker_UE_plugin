@@ -34,7 +34,7 @@ void UNearlinkerFunctionLibraryNft::CallNftTransferCall(FString const& contract_
 	, FString gas, FString deposit
 ){
 	FFunctionCallData function_call;
-	function_call.name="nft_transfer";
+	function_call.name="nft_transfer_call";
 	function_call.add_parameter(TEXT("receiver_id") , receiver_id );
 	function_call.add_parameter(TEXT("token_id")    , token_id    );
 	function_call.add_parameter(TEXT("approval_id") , approval_id );
