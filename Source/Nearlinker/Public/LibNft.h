@@ -10,7 +10,7 @@
 #include"LibNft.generated.h"
 
 USTRUCT(BlueprintType)
-struct FNearTokenMetadata{
+struct FNearNonFungibleTokenMetadata{
 	GENERATED_BODY()
  
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -40,7 +40,7 @@ struct FNearTokenMetadata{
 };
 
 USTRUCT(BlueprintType)
-struct FNearToken{
+struct FNearNonFungibleToken{
 	GENERATED_BODY()
  
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Core")
@@ -48,15 +48,15 @@ struct FNearToken{
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Core")
 	FString owner_id;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Metadata")
-	FNearTokenMetadata metadata;
+	FNearNonFungibleTokenMetadata metadata;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Approval Management")
 	TMap<FString,int> approved_account_ids;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Royalties and Payouts")
 	TMap<FString,int> royalty;
 };
  
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FNearHttpGetTokensCompleteDelegate, TArray<FNearToken> const&, near_tokens, bool, bConnectedSuccessfully);
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FNearHttpGetTokenCompleteDelegate, FNearToken const&, near_token, bool, bConnectedSuccessfully);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FNearHttpGetTokensCompleteDelegate, TArray<FNearNonFungibleToken> const&, near_tokens, bool, bConnectedSuccessfully);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FNearHttpGetTokenCompleteDelegate, FNearNonFungibleToken const&, near_token, bool, bConnectedSuccessfully);
 
 UCLASS()
 class NEARLINKER_API UNearlinkerFunctionLibraryNft : public UBlueprintFunctionLibrary{

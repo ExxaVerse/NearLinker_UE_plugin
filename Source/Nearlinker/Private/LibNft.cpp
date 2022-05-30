@@ -147,7 +147,7 @@ void UNearlinkerFunctionLibraryNft::ViewNftIsApproved(FString const& contract_id
 //
 
 void parse_and_forward(FString response, bool request_succeded, FNearHttpGetTokenCompleteDelegate const& response_handler){
-	FNearToken result;
+	FNearNonFungibleToken result;
 	if(!FJsonObjectConverter::JsonObjectStringToUStruct(response, &result, 0, 0)){
 		UE_LOG(LogNearlinker, Error, TEXT("Failed to parse the Inegration Server response as a NEAR token"));
 		return;
@@ -156,7 +156,7 @@ void parse_and_forward(FString response, bool request_succeded, FNearHttpGetToke
 }
 
 void parse_and_forward(FString response, bool request_succeded, FNearHttpGetTokensCompleteDelegate const& response_handler){
-	TArray<FNearToken> result;
+	TArray<FNearNonFungibleToken> result;
 	if(!FJsonObjectConverter::JsonArrayStringToUStruct(response, &result, 0, 0)){
 		UE_LOG(LogNearlinker, Error, TEXT("Failed to parse the Inegration Server response as a list of NEAR tokens"));
 		return;
